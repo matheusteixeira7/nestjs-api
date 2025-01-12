@@ -11,8 +11,11 @@ const databaseSchema = z.object({
     username: z.string(),
 });
 
+const jwtSecret = z.string().min(1);
+
 export const configSchema = z.object({
     env: environmentSchema,
     port: z.coerce.number().positive().int(),
     database: databaseSchema,
+    jwtSecret,
 });

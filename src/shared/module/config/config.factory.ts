@@ -14,6 +14,7 @@ export const factory = (): Config => {
             url: process.env.DATABASE_URL,
             username: process.env.DATABASE_USERNAME,
         },
+        jwtSecret: process.env.JWT_SECRET,
     });
 
     if (result.success) {
