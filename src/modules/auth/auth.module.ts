@@ -7,15 +7,15 @@ import { APP_GUARD } from '@nestjs/core';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [UsersModule, ConfigModule],
-  providers: [
-    AuthService,
-    {
-      provide: APP_GUARD,
-      useClass: AuthGuard,
-    },
-  ],
-  controllers: [AuthController],
-  exports: [AuthService],
+    imports: [UsersModule, ConfigModule],
+    providers: [
+        AuthService,
+        {
+            provide: APP_GUARD,
+            useClass: AuthGuard,
+        },
+    ],
+    controllers: [AuthController],
+    exports: [AuthService],
 })
 export class AuthModule {}
