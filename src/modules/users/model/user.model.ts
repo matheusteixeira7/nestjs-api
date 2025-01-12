@@ -5,7 +5,6 @@ import {
 } from 'src/shared/core/model/default.model';
 
 export class UserModel extends DefaultModel {
-    username: string;
     password: string;
     firstName: string;
     lastName: string;

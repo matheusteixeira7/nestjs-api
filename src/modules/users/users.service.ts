@@ -1,37 +1,38 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-
-// This should be a real class/interface representing a user entity
-export type User = {
-    userId: number;
-    username: string;
-    password: string;
-};
+import { UserModel } from './model/user.model';
+import { UserRepository } from './user.repository';
 
 @Injectable()
 export class UsersService {
-    private readonly users = [
-        {
-            userId: 1,
-            username: 'john',
-            password: 'changeme',
-        },
-        {
-            userId: 2,
-            username: 'maria',
-            password: 'guess',
-        },
-    ];
+    constructor(private userRepo: UserRepository) {}
 
-    async findOne(username: string): Promise<User | undefined> {
-        return this.users.find((user) => user.username === username);
+    async createUser(data: CreateUserDto): Promise<void> {
+        const user = UserModel.create(data);
+        await this.userRepo.save(user);
     }
 
-    async createUser(user: CreateUserDto): Promise<void> {
-        this.users.push({
-            userId: this.users.length + 1,
-            username: user.username,
-            password: user.password,
+    async findOneById(id: string): Promise<UserModel> {
+        const user = await this.userRepo.findOneBy({
+            id,
         });
+
+        if (!user) {
+            throw new Error('User not found');
+        }
+
+        return user;
+    }
+
+    async findOneByEmail(email: string): Promise<UserModel> {
+        const user = await this.userRepo.findOneBy({
+            email,
+        });
+
+        if (!user) {
+            throw new Error('User not found');
+        }
+
+        return user;
     }
 }

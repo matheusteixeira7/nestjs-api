@@ -11,11 +11,20 @@ COPY pnpm*.yaml ./
 # Install pnpm
 RUN npm i -g pnpm
 
+# Add openssl
+RUN apt-get update && apt-get install -y openssl
+
+# Remove node_modules and prisma/generated
+RUN rm -fr node_modules prisma/generated
+
 # Install dependencies
 RUN pnpm install
 
 # Copy the rest of the application code to the working directory
 COPY . .
+
+# Generate Prisma Client
+RUN npx prisma generate
 
 # Build the application
 RUN pnpm build
