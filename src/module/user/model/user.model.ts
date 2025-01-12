@@ -2,7 +2,7 @@ import { randomUUID } from 'crypto';
 import {
     DefaultModel,
     WithOptional,
-} from 'src/shared/core/model/default.model';
+} from '@src/shared/core/model/default.model';
 
 export class UserModel extends DefaultModel {
     password: string;

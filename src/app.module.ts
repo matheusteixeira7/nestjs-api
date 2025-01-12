@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { AuthModule } from './modules/auth/auth.module';
-import { UsersModule } from './modules/users/users.module';
 import { JwtModule } from '@nestjs/jwt';
 import { AppResolver } from './app.resolver';
 import { ConfigModule } from './shared/module/config/config.module';
 import { ConfigService } from './shared/module/config/config.service';
+import { UserModule } from './module/user/user.module';
+import { AuthModule } from './module/auth/auth.module';
 
 @Module({
     imports: [
@@ -20,7 +20,7 @@ import { ConfigService } from './shared/module/config/config.service';
             }),
         }),
         AuthModule,
-        UsersModule,
+        UserModule,
     ],
     providers: [AppResolver],
 })
