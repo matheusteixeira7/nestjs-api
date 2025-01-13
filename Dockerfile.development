@@ -1,0 +1,45 @@
+# Stage 1: Base with dependencies installation
+FROM node:20.18.1-alpine3.21 AS dependencies
+
+# Set the working directory
+WORKDIR /usr/src/app
+
+# Install build tools for Prisma (only for the dependency stage)
+RUN apk add --no-cache openssl
+
+# Copy package manager files
+COPY package*.json ./
+COPY pnpm*.yaml ./
+
+# Install pnpm globally
+RUN npm install -g pnpm
+
+# Install dependencies
+RUN pnpm install --frozen-lockfile
+
+# Stage 2: Build Prisma Client (optional if required for local development)
+FROM dependencies AS prisma
+
+# Copy the application code
+COPY . .
+
+# Generate Prisma Client
+RUN npx prisma generate
+
+# Stage 3: Final lightweight development image
+FROM node:20.18.1-alpine3.21
+
+# Set the working directory
+WORKDIR /usr/src/app
+
+# Copy the dependencies and Prisma Client from previous stages
+COPY --from=prisma /usr/src/app /usr/src/app
+
+# Install pnpm globally in the final image
+RUN npm install -g pnpm
+
+# Expose the development port
+EXPOSE 3000
+
+# Command to run the app in development mode
+CMD [ "pnpm", "start:dev" ]
